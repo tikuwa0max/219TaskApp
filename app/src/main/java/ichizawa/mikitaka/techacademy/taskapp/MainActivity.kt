@@ -43,6 +43,29 @@ class MainActivity : AppCompatActivity() {
         // ListViewの設定
         mTaskAdapter = TaskAdapter(this@MainActivity)
 
+        search_button.setOnClickListener(){
+            
+        }
+
+            search_button.setOnClickListener{
+        // Build the query looking at all users:
+        val query = mRealm.where(Task::class.java)
+        // Add query conditions:
+        query.or().equalTo("category", query_edit_text.getText().toString())
+        // Execute the query:
+        val search_result = query.findAll()
+
+        // 上記の結果を、TaskList としてセットする
+        mTaskAdapter.taskList = mRealm.copyFromRealm(search_result)
+
+        // TaskのListView用のアダプタに渡す
+        listView1.adapter = mTaskAdapter
+
+        // 表示を更新するために、アダプターにデータが変更されたことを知らせる
+        mTaskAdapter.notifyDataSetChanged()
+
+        }
+
         // ListViewをタップしたときの処理
         listView1.setOnItemClickListener { parent, _, position, _ ->
             // 入力・編集する画面に遷移させる
