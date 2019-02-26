@@ -46,21 +46,27 @@ class MainActivity : AppCompatActivity() {
         search_button.setOnClickListener{
         // Build the query looking at all users:
         val query = mRealm.where(Task::class.java)
-        // Add query conditions:
-        query.or().equalTo("category", query_edit_text.getText().toString())
-        // Execute the query:
-        val search_result = query.findAll()
+
+        val query_edit =  query_edit_text.getText().toString()
+
+        if(query_edit == ""){
+            reloadListView()
+        }else {
 
 
+            // Execute the query:
+            val search_result = query.equalTo("category", query_edit).findAll()
 
-        // 上記の結果を、TaskList としてセットする
-        mTaskAdapter.taskList = mRealm.copyFromRealm(search_result)
 
-        // TaskのListView用のアダプタに渡す
-        listView1.adapter = mTaskAdapter
+            // 上記の結果を、TaskList としてセットする
+            mTaskAdapter.taskList = mRealm.copyFromRealm(search_result)
 
-        // 表示を更新するために、アダプターにデータが変更されたことを知らせる
-        mTaskAdapter.notifyDataSetChanged()
+            // TaskのListView用のアダプタに渡す
+            listView1.adapter = mTaskAdapter
+
+            // 表示を更新するために、アダプターにデータが変更されたことを知らせる
+            mTaskAdapter.notifyDataSetChanged()
+        }
 
         }
 
